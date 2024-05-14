@@ -431,7 +431,7 @@ export default function Home() {
           >
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-4 sm:gap-x-8 text-[18px]">
               <div className="mt-8">
-                <p className="">Voornaam</p>
+                <p className="">Name</p>
                 <InputField
                   registration={{ ...register("name") }}
                   hasError={errors.name}
