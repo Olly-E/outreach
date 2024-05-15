@@ -16,12 +16,12 @@ import { ContactUsForm } from "./types";
 export default function Home() {
   const STATS_DATA = [
     {
-      stat: "34000+",
+      stat: "34M+",
       description: "Food distribution programs",
     },
     {
       stat: "32",
-      description: "African Countries Reached",
+      description: "African, European & South American Countries Reached",
     },
     {
       stat: "1200+",
@@ -115,46 +115,46 @@ export default function Home() {
 
   const STORIES_TELL = [
     {
-      name: "Maria S.",
+      name: "Marsha Conroy",
       id: "1",
       img: "/human1.png",
       testimony:
-        "As a volunteer with USAID's Orphanage Outreach Program, I've witnessed first-hand the transformative power of love and support. Every child deserves to feel valued and cherished, and this program makes that possible.\"",
+        "As a volunteer with [Orphanage Outreach Program], I've witnessed first-hand the transformative power of love and support. Every child deserves to feel valued and cherished, and this program makes that possible.",
     },
     {
-      name: "David L.",
+      name: "Jorge Pfannerstill",
       id: "2",
       img: "/human2.png",
       testimony:
-        "Thanks to the educational support I received from USAID's Orphanage Outreach Program, I was able to pursue my dreams of higher education. Now, I'm studying to become a nurse, and I owe it all to the opportunities provided by this incredible program.\"",
+        "The team at [Orphanage Outreach Program] goes above and beyond to ensure the well-being of every child in their care. Their dedication and compassion are truly inspiring, and I feel honoured to be a part of their mission.",
     },
     {
-      name: "David L.",
+      name: "Kayla King",
       id: "3",
       img: "/human3.png",
       testimony:
-        "Thanks to the educational support I received from USAID's Orphanage Outreach Program, I was able to pursue my dreams of higher education. Now, I'm studying to become a nurse, and I owe it all to the opportunities provided by this incredible program.\"",
+        "I've seen the impact of [Orphanage Outreach Program] firsthand in my community. Children who once felt alone and abandoned are now thriving, thanks to the support and guidance they receive. This program truly changes lives.",
     },
     {
-      name: "David L.",
+      name: "Jonathon Borer",
       id: "4",
       img: "/human4.png",
       testimony:
-        "Thanks to the educational support I received from USAID's Orphanage Outreach Program, I was able to pursue my dreams of higher education. Now, I'm studying to become a nurse, and I owe it all to the opportunities provided by this incredible program.\"",
+        "Donating to [Orphanage Outreach Program] has been one of the best decisions I've made. Knowing that my contribution helps provide essentials and opportunities to children in need fills my heart with joy.",
     },
     {
-      name: "David L.",
+      name: "Kyle Durgan",
       id: "5",
       img: "/human5.png",
       testimony:
-        "Thanks to the educational support I received from USAID's Orphanage Outreach Program, I was able to pursue my dreams of higher education. Now, I'm studying to become a nurse, and I owe it all to the opportunities provided by this incredible program.\"",
+        "Thanks to the educational support I received from [Orphanage Outreach Program], I was able to pursue my dreams of higher education. Now, I'm studying to become a nurse, and I owe it all to the opportunities provided by this incredible program.",
     },
     {
-      name: "David L.",
+      name: "Minnie Harber.",
       id: "6",
       img: "/human6.png",
       testimony:
-        "Thanks to the educational support I received from USAID's Orphanage Outreach Program, I was able to pursue my dreams of higher education. Now, I'm studying to become a nurse, and I owe it all to the opportunities provided by this incredible program.\"",
+        "The impact of [Orphanage Outreach Program] extends far beyond the walls of their facility. Their dedication to advocacy and community engagement is inspiring, and I am proud to support their mission.",
     },
   ];
 
@@ -174,7 +174,13 @@ export default function Home() {
 
   return (
     <main className="">
-      <section className="bg-black h-screen">
+      <section className="bg-black/40 h-screen relative">
+        <Image
+          fill
+          src="/hero.png"
+          alt="hero"
+          className="absolute object-cover -z-[1]"
+        />
         <div className="container py-14">
           <Image width={189} height={56.85} src="/logo.svg" alt="org-logo" />
           <div className="xl:w-[1100px] mx-auto text-center  py-20">
@@ -193,12 +199,12 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section className="bg-primary py-20">
+      <section className="bg-primary py-20 overflow-hidden">
         <div className="container">
           <h3 className="font-[600] text-[32px] md:text-[36px] text-white text-center sm:text-left sm:w-[494px]">
             Touching Stories Of Positive Change And Compassion
           </h3>
-          <div className="grid sm:grid-cols-5 w-full gap-10 mt-10">
+          <div className="grid sm:grid-cols-5 w-full gap-10 mt-10 relative">
             <Image
               width={767}
               height={820}
@@ -206,13 +212,22 @@ export default function Home() {
               alt="org-logo"
               className="col-span-3 w-full"
             />
-            <Image
-              width={498}
-              height={507}
-              src="/hug2.png"
-              alt="org-logo"
-              className="rounded-md w-full aspect-square col-span-2"
-            />
+            <div className="relative col-span-2">
+              <Image
+                width={498}
+                height={507}
+                src="/hug2.png"
+                alt="org-logo"
+                className="rounded-md w-full aspect-square"
+              />
+              <Image
+                width={424}
+                height={424}
+                src="/heart.svg"
+                alt="org-logo"
+                className="absolute sm:top-20 -top-[162px] left-[200px] sm:left-[-200px] z-2"
+              />
+            </div>
           </div>
           <div className="grid gap-20 sm:grid-cols-2 md:grid-cols-3 py-20 justify-items-center">
             {STATS_DATA.map((content, index) => {
@@ -348,17 +363,11 @@ export default function Home() {
             support. Join us in spreading joy.
           </p>
         </div>
-        <div className="flex mt-20">
-          {STORIES_IMG.slice(0, 4).map((pic) => {
+        <div className="flex mt-20 gap-0 ">
+          {STORIES_IMG.slice(0, 4).map((pic, index) => {
             return (
               <div key={pic}>
-                <Image
-                  width={445}
-                  height={445}
-                  src={pic}
-                  alt="need-img"
-                  className="w-full"
-                />
+                <img src={pic} alt="need-img" className={clsx("w-full")} />
               </div>
             );
           })}
@@ -367,12 +376,10 @@ export default function Home() {
           {STORIES_IMG.slice(4, 8).map((pic) => {
             return (
               <div key={pic}>
-                <Image
-                  width={445}
-                  height={445}
+                <img
                   src={pic}
                   alt="need-img"
-                  className="w-full"
+                  className="w-full max-h-[550px] aspect-square"
                 />
               </div>
             );
@@ -492,7 +499,9 @@ export default function Home() {
             <p className="">usaidorphangeoutreach@gov.us</p>
           </div>
         </div>
-        <p className="text-center mt-40 text-black/40 text-xs">© 2024 — USAID Orphanage Outreach</p>
+        <p className="text-center mt-40 text-black/40 text-xs">
+          © 2024 — USAID Orphanage Outreach
+        </p>
       </footer>
     </main>
   );
