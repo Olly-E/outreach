@@ -1,9 +1,12 @@
 "use client";
 
+import { useForm as ReactUseForm, Control } from "react-hook-form";
+import { useForm, ValidationError } from "@formspree/react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm, Control } from "react-hook-form";
+import toast, { Toaster } from "react-hot-toast";
 import { SpectralSc } from "./font";
 import Image from "next/image";
+import React from "react";
 import clsx from "clsx";
 
 import { InputFieldPhoneNo } from "./components/form/InputFieldPhoneNo";
@@ -14,6 +17,8 @@ import { Button } from "./components/elements/Button";
 import { ContactUsForm } from "./types";
 
 export default function Home() {
+  const [loading, setLoading] = React.useState(false);
+
   const STATS_DATA = [
     {
       stat: "34M+",
@@ -119,14 +124,14 @@ export default function Home() {
       id: "1",
       img: "/human1.png",
       testimony:
-        "As a volunteer with [Orphanage Outreach Program], I've witnessed first-hand the transformative power of love and support. Every child deserves to feel valued and cherished, and this program makes that possible.",
+        "As a volunteer with USAID's Orphanage Outreach Program, I've witnessed first-hand the transformative power of love and support. Every child deserves to feel valued and cherished, and this program makes that possible.",
     },
     {
       name: "Jorge Pfannerstill",
       id: "2",
       img: "/human2.png",
       testimony:
-        "The team at [Orphanage Outreach Program] goes above and beyond to ensure the well-being of every child in their care. Their dedication and compassion are truly inspiring, and I feel honoured to be a part of their mission.",
+        "The team at USAID's Orphanage Outreach Program goes above and beyond to ensure the well-being of every child in their care. Their dedication and compassion are truly inspiring, and I feel honoured to be a part of their mission.",
     },
     {
       name: "Kayla King",
@@ -140,21 +145,21 @@ export default function Home() {
       id: "4",
       img: "/human4.png",
       testimony:
-        "Donating to [Orphanage Outreach Program] has been one of the best decisions I've made. Knowing that my contribution helps provide essentials and opportunities to children in need fills my heart with joy.",
+        "Donating to USAID's Orphanage Outreach Program has been one of the best decisions I've made. Knowing that my contribution helps provide essentials and opportunities to children in need fills my heart with joy.",
     },
     {
       name: "Kyle Durgan",
       id: "5",
       img: "/human5.png",
       testimony:
-        "Thanks to the educational support I received from [Orphanage Outreach Program], I was able to pursue my dreams of higher education. Now, I'm studying to become a nurse, and I owe it all to the opportunities provided by this incredible program.",
+        "Thanks to the educational support I received from USAID's Orphanage Outreach Program, I was able to pursue my dreams of higher education. Now, I'm studying to become a nurse, and I owe it all to the opportunities provided by this incredible program.",
     },
     {
       name: "Minnie Harber.",
       id: "6",
       img: "/human6.png",
       testimony:
-        "The impact of [Orphanage Outreach Program] extends far beyond the walls of their facility. Their dedication to advocacy and community engagement is inspiring, and I am proud to support their mission.",
+        "The impact of USAID's Orphanage Outreach Program extends far beyond the walls of their facility. Their dedication to advocacy and community engagement is inspiring, and I am proud to support their mission.",
     },
   ];
 
@@ -162,18 +167,52 @@ export default function Home() {
     reset,
     control,
     register,
-    handleSubmit,
+    handleSubmit: handleSubmitForm,
     formState: { errors },
-  } = useForm<ContactUsForm>({
+  } = ReactUseForm<ContactUsForm>({
     resolver: yupResolver(contactUsSchema),
   });
 
-  const onSubmit = (value: ContactUsForm) => {
-    console.log(value);
+  function convertToURLSearchParams<T extends Record<string, any>>(
+    data: T
+  ): URLSearchParams {
+    const params = new URLSearchParams();
+    Object.keys(data).forEach((key) => {
+      const value = data[key];
+      params.append(key, String(value)); // Convert all values to strings
+    });
+    return params;
+  }
+
+  const formId = process.env.NEXT_PUBLIC_FORMSPREE_ID;
+
+  const onSubmit = async (data: ContactUsForm) => {
+    setLoading(true);
+    const params = convertToURLSearchParams(data);
+    const response = await fetch(`https://formspree.io/f/${formId}`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: params.toString(),
+    });
+
+    if (response.ok) {
+      console.log("Form successfully submitted");
+      toast.success("Form successfully submitted");
+      setLoading(false);
+      reset(); // Reset form fields assuming reset() is defined somewhere in your component
+    } else {
+      console.error("Form submission error");
+      toast.error("Form submission error");
+      setLoading(false);
+    }
   };
 
   return (
     <main className="">
+      <Toaster />
       <section className="bg-black/40 h-screen relative">
         <Image
           fill
@@ -433,7 +472,7 @@ export default function Home() {
             about how you can support our cause, we'd love to hear from you.
           </p>
           <form
-            onSubmit={handleSubmit(onSubmit)}
+            onSubmit={handleSubmitForm(onSubmit)}
             className="text-black pt-6 text-[16px] sm:text-[20px] col-span-3 p-8 mt-10 bg-white"
           >
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-4 sm:gap-x-8 text-[18px]">
@@ -477,8 +516,13 @@ export default function Home() {
                 />
               </div>
             </div>
-            <Button type="submit" className="mt-4 sm:w-[415px] mx-auto">
-              Submit
+            <Button
+              isLoading={loading}
+              disabled={loading}
+              type="submit"
+              className="mt-4 sm:w-[415px] mx-auto"
+            >
+              {loading ? "Submitting" : "Submit"}
             </Button>
           </form>
         </div>

@@ -79,7 +79,7 @@ export const InputField: React.FC<InputFieldProps> = ({
         <input
           className={clsx(
             'h-[40px] w-full border-[#B7B7B7] border bg-white rounded-md font-WorkSans px-4 outline-none placeholder:text-sm placeholder:text-gray-300 placeholder:font-light focus-within:border-gray-550 disabled:bg-gray-100',
-            hasError && 'border-b-red-500',
+            hasError && 'border-red-500',
             className
           )}
           type={type}
