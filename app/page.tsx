@@ -225,7 +225,7 @@ export default function Home() {
                 height={424}
                 src="/heart.svg"
                 alt="org-logo"
-                className="absolute sm:top-20 -top-[162px] left-[200px] sm:left-[-200px] z-2"
+                className="absolute sm:top-[200px] -top-[162px] left-[200px] sm:left-[-200px] z-2"
               />
             </div>
           </div>
