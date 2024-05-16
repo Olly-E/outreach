@@ -1,9 +1,8 @@
-import type { Metadata } from "next";
 import { Open_Sans } from "next/font/google";
-import "./globals.css";
+import "react-phone-number-input/style.css";
+import type { Metadata } from "next";
 import { OpenSans } from "./font";
-
-
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,7 +16,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={OpenSans.className}>{children}</body>
+      <body className={OpenSans.className}>
+        {children}
+        <div id="modal-root" />
+      </body>
     </html>
   );
 }

@@ -42,7 +42,7 @@ export const InputFieldPhoneNo: React.FC<InputFieldPhoneNoProps> = ({
             )}
             <PhoneInput
               className={clsx(
-                'bg-white-state h-[40px] w-full appearance-none font-WorkSans border-b border-b-black outline-none px-4 focus-within:border-gray-550 placeholder:text-gray-250',
+                'bg-white-state h-[40px] w-full appearance-none font-WorkSans border rounded-md border-gray-400 outline-none px-4 focus-within:border-gray-550 placeholder:text-gray-250',
                 hasError && 'border-red-500 outline-none',
                 className
               )}

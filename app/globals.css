@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.PhoneInputInput {
+  @apply bg-transparent outline-none;
+}
+
 .container {
   max-width: 1440px;
   padding-left: 40px;

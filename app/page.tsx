@@ -1,24 +1,19 @@
 "use client";
 
-import { useForm as ReactUseForm, Control } from "react-hook-form";
-import { useForm, ValidationError } from "@formspree/react";
-import { yupResolver } from "@hookform/resolvers/yup";
 import toast, { Toaster } from "react-hot-toast";
 import { SpectralSc } from "./font";
 import Image from "next/image";
 import React from "react";
 import clsx from "clsx";
 
-import { InputFieldPhoneNo } from "./components/form/InputFieldPhoneNo";
-import { TextAreaField } from "./components/form/TextAreaField";
-import { contactUsSchema } from "./utils/validationSchema";
-import { InputField } from "./components/form/InputField";
 import { Button } from "./components/elements/Button";
 import { ContactUsForm } from "./types";
+import { useAllCountries } from "./api/useCountries";
+import { SelectFieldWithInput } from "./components/form/SelectFieldWithInput";
+import DonateModal from "./components/DonateModal";
+import { useComponentVisible } from "./utils/useComponentVisible";
 
 export default function Home() {
-  const [loading, setLoading] = React.useState(false);
-
   const STATS_DATA = [
     {
       stat: "34M+",
@@ -164,51 +159,11 @@ export default function Home() {
   ];
 
   const {
-    reset,
-    control,
-    register,
-    handleSubmit: handleSubmitForm,
-    formState: { errors },
-  } = ReactUseForm<ContactUsForm>({
-    resolver: yupResolver(contactUsSchema),
-  });
-
-  function convertToURLSearchParams<T extends Record<string, any>>(
-    data: T
-  ): URLSearchParams {
-    const params = new URLSearchParams();
-    Object.keys(data).forEach((key) => {
-      const value = data[key];
-      params.append(key, String(value)); // Convert all values to strings
-    });
-    return params;
-  }
-
-  const formId = process.env.NEXT_PUBLIC_FORMSPREE_ID;
-
-  const onSubmit = async (data: ContactUsForm) => {
-    setLoading(true);
-    const params = convertToURLSearchParams(data);
-    const response = await fetch(`https://formspree.io/f/${formId}`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: params.toString(),
-    });
-
-    if (response.ok) {
-      console.log("Form successfully submitted");
-      toast.success("Form successfully submitted");
-      setLoading(false);
-      reset(); // Reset form fields assuming reset() is defined somewhere in your component
-    } else {
-      console.error("Form submission error");
-      toast.error("Form submission error");
-      setLoading(false);
-    }
-  };
+    ref: modalRef,
+    isComponentVisible,
+    setIsComponentVisible,
+    handleClickOnDropDownButton,
+  } = useComponentVisible();
 
   return (
     <main className="">
@@ -232,7 +187,11 @@ export default function Home() {
               brings hope to vulnerable children, transforming lives with love
               and support, Join us in spreading joy.
             </p>
-            <Button href="/" className="sm:w-[337px] mt-10 flex mx-auto">
+            <Button
+              onClick={handleClickOnDropDownButton}
+              href="/"
+              className="sm:w-[337px] mt-10 flex mx-auto"
+            >
               Donate Now
             </Button>
           </div>
@@ -348,7 +307,12 @@ export default function Home() {
                   )}
                 >
                   <h3 className="text-[24px] font-bold mt-4">{content.name}</h3>
-                  <Button variant="outline" className={clsx("mt-4 w-[183px]")}>
+                  <Button
+                    type="button"
+                    onClick={handleClickOnDropDownButton}
+                    variant="outline"
+                    className={clsx("mt-4 w-[183px]")}
+                  >
                     Donate
                   </Button>
                 </div>
@@ -471,60 +435,6 @@ export default function Home() {
             Whether you're looking to volunteer, donate, or simply learn more
             about how you can support our cause, we'd love to hear from you.
           </p>
-          <form
-            onSubmit={handleSubmitForm(onSubmit)}
-            className="text-black pt-6 text-[16px] sm:text-[20px] col-span-3 p-8 mt-10 bg-white"
-          >
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-4 sm:gap-x-8 text-[18px]">
-              <div className="mt-8">
-                <p className="">Name</p>
-                <InputField
-                  registration={{ ...register("name") }}
-                  hasError={errors.name}
-                  className="mt-2 sm:mt-4"
-                  isRequired
-                />
-              </div>
-              <div className="mt-8">
-                <p className="">Email Address</p>
-                <InputField
-                  registration={{ ...register("email") }}
-                  hasError={errors.email}
-                  className="mt-2 sm:mt-4"
-                  isRequired
-                />
-              </div>
-              <div className="mt-8">
-                <p className="">Address</p>
-                <InputField
-                  registration={{ ...register("address") }}
-                  hasError={errors.address}
-                  className="mt-2 sm:mt-4"
-                  isRequired
-                />
-              </div>
-              <div className="mt-8 sm:col-span-3">
-                <p className="">Message</p>
-                <TextAreaField
-                  id="message"
-                  registration={{ ...register("message") }}
-                  hasError={errors.message}
-                  className="mt-2 sm:mt-4 resize-none rounded-md"
-                  isRequired
-                  placeholder="Write your message here..."
-                  limit={1500}
-                />
-              </div>
-            </div>
-            <Button
-              isLoading={loading}
-              disabled={loading}
-              type="submit"
-              className="mt-4 sm:w-[415px] mx-auto"
-            >
-              {loading ? "Submitting" : "Submit"}
-            </Button>
-          </form>
         </div>
       </section>
       <footer className="bg-white pt-28 pb-10">
@@ -547,6 +457,11 @@ export default function Home() {
           © 2024 — USAID Orphanage Outreach
         </p>
       </footer>
+      <DonateModal
+        modalRef={modalRef}
+        modalOpen={isComponentVisible}
+        handleClose={() => setIsComponentVisible(false)}
+      />
     </main>
   );
 }
