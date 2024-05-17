@@ -255,7 +255,7 @@ const DonateModal = ({
           isLoading={loading}
           disabled={loading}
           type="submit"
-          className="mt-4 sm:w-[415px] mx-auto"
+          className="mt-10 sm:w-[415px] mx-auto"
         >
           {loading ? "Submitting" : "Submit"}
         </Button>
